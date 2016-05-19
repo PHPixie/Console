@@ -1,0 +1,28 @@
+<?php
+
+namespace PHPixie\Console\Context;
+
+class SAPI extends \PHPixie\Console\Context
+{
+
+    protected function instance($name)
+    {
+        if(!array_key_exists($name, $this->instances)) {
+            $method = 'build'.ucfirst($name);
+            $this->instances[$name] = $this->$method();
+        }
+
+        return $this->instances[$name];
+    }
+
+    public function inputStream()
+    {
+        return $this->instance('inputStream');
+    }
+
+    public function outputStream();
+    public function errorStream();
+    public function currentDirectory();
+    public function arguments();
+    public function getOptions();
+}
