@@ -2,9 +2,14 @@
 
 namespace PHPixie\Console\Context\Container;
 
-class Impelementation extends PHPixie\Console\Context\Container
+class Implementation implements \PHPixie\Console\Context\Container
 {
     protected $consoleContext;
+
+    public function __construct($consoleContext)
+    {
+        $this->consoleContext = $consoleContext;
+    }
 
     public function consoleContext()
     {

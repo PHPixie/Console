@@ -2,25 +2,28 @@
 
 namespace PHPixie\Console\Context;
 
-class SAPI extends \PHPixie\Console\Context
+class SAPI implements \PHPixie\Console\Context
 {
-    protected $streams;
+    protected $builder;
 
     protected $inputStream;
     protected $outputStream;
     protected $errorStream;
+
     protected $currentDirectory;
+
+    protected $options;
     protected $arguments;
 
-    public function __construct($streams)
+    public function __construct($builder)
     {
-        $this->streams = $streams;
+        $this->builder = $builder;
     }
 
     public function inputStream()
     {
         if($this->inputStream === null) {
-            $this->inputStream = $this->streams->input(STDIN);
+            $this->inputStream = $this->builder->inputStream(STDIN);
         }
 
         return $this->inputStream;
@@ -29,7 +32,7 @@ class SAPI extends \PHPixie\Console\Context
     public function outputStream()
     {
         if($this->outputStream === null) {
-            $this->outputStream = $this->streams->output(STDOUT);
+            $this->outputStream = $this->builder->outputStream(STDOUT);
         }
 
         return $this->outputStream;
@@ -38,7 +41,7 @@ class SAPI extends \PHPixie\Console\Context
     public function errorStream()
     {
         if($this->errorStream === null) {
-            $this->errorStream = $this->streams->output(STDERR);
+            $this->errorStream = $this->builder->outputStream(STDERR);
         }
 
         return $this->errorStream;
@@ -55,58 +58,71 @@ class SAPI extends \PHPixie\Console\Context
 
     public function arguments()
     {
-        if($this->arguments === null) {
-            global $argv;
-            $args = $argv;
-            array_shift($args);
-            return $args;
-        }
-
+        $this->requireParsedArguments();
         return $this->arguments;
     }
 
-    public function getOptions(
-        $long = array(),
-        $short = array(),
-        $flags = array(),
-        $shortAliases = array()
-    )
+    public function options()
     {
-        $longOpts = array();
-        $shortOpts = array();
+        $this->requireParsedArguments();
+        return $this->options;
+    }
 
-        $flags = array_fill_keys($flags, true);
+    public function rawArguments()
+    {
+        global $argv;
+        return $argv;
+    }
 
-        foreach($long as $name) {
-            $opt = isset($flags[$name]) ? $name : $name.'::';
-            $longOpts[] = $opt;
+    public function requireParsedArguments()
+    {
+        if($this->arguments !== null) {
+            return;
         }
 
-        foreach($short as $name) {
-            $opt = isset($flags[$name]) ? $name : $name.'::';
-            $shortOpts[$opt] = true;
-        }
+        global $argv;
+        $parameters = $this->rawArguments();
 
-        foreach($shortAliases as $alias => $name) {
-            $opt = isset($flags[$name]) ? $alias : $alias.'::';
-            $shortOpts[$opt] = true;
-        }
+        $arguments = array();
+        $options = array();
 
-        $shortOpts = implode('', array_keys($shortOpts));
-        $data = getopt($shortOpts, $longOpts);
+        array_shift($parameters);
+        foreach($parameters as $parameter) {
 
-        $result = array();
-        foreach($data as $name => $value) {
-            if(isset($shortAliases[$name])) {
-                $name = $shortAliases[$name];
+            if($parameter{0} !== '-') {
+                $arguments[]= $parameter;
+                continue;
             }
 
-            if(isset($flags[$name])) {
-                $value = true;
+            if(preg_match('#^-([a-z0-9])=(.*)$#i', $parameter, $matches)) {
+                foreach(str_split($matches[1]) as $option) {
+                    $options[$matches[1]] = $matches[2];
+                }
+                continue;
             }
 
-            $result[$name] = $value;
+            if(preg_match('#^-([a-z0-9]*)$#i', $parameter, $matches)) {
+                foreach(str_split($matches[1]) as $option) {
+                    $options[$option] = true;
+                }
+                continue;
+            }
+
+            if(preg_match('#^--([a-z0-9]+)(?:=(.*))?$#i', $parameter, $matches)) {
+                $option = $matches[1];
+
+                if(!empty($matches[2])) {
+                    $options[$option] = $matches[2];
+                }else{
+                    $options[$option] = true;
+                }
+                continue;
+            }
+
+            throw new \PHPixie\Console\Exception("Invalid option '$parameter'");
         }
 
-        return $result;
+        $this->options = $this->builder->data($options);
+        $this->arguments = $this->builder->data($arguments);
+    }
 }
