@@ -26,12 +26,6 @@ class Prompt
         return $context->inputStream()->read(1);
     }
 
-    public function charPrompt($string)
-    {
-        $context->outputStream()->write($string.' ');
-        return $context->inputStream()->read(1);
-    }
-
     public function table($rows)
     {
         $sizes = array();
@@ -55,23 +49,37 @@ class Prompt
         }
 
         foreach($sizes as $key => $size) {
-            $sizes[$key]+= 4;
+            $sizes[$key]+= 3;
         }
 
         $separator = '';
         foreach($sizes as $size) {
-            $separator. = str_pad('+', '-', $size);
+            $separator.= str_pad('+', $size, '-');
         }
         $separator.="+\n";
 
         $result = $separator;
 
         array_unshift(array_combine($keys, $keys), $rows);
-        foreach($rows as $i => $row) {
 
+        foreach($sizes as $key => $size) {
+            $result.= str_pad('| '.$key, $size);
         }
 
+        $result.="|\n";
 
+        $result.= $separator;
+
+        foreach($rows as $i => $row) {
+            foreach($sizes as $key => $size) {
+                $result.= str_pad('| '.$row[$key], $size);
+            }
+
+            $result.="|\n";
+        }
+
+        $result .= $separator;
+        return $result;
     }
 
     protected function tableSeparator($sizes)
