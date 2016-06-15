@@ -1,7 +1,7 @@
 {
-    "name": "phpixie/orm",
-    "description": "ORM library for PHPixie",
-    "keywords": ["orm", "database"],
+    "name": "phpixie/console",
+    "description": "Console command library for PHPixie",
+    "keywords": ["cli", "console"],
     "homepage": "http://phpixie.com",
     "type": "library",
     "license": "BSD",
