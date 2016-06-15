@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ea6d9620526b0c157d7eef7633f0de28",
-    "content-hash": "351b49992f56288c271ee1172478f9f7",
+    "hash": "7647d842be7f7179a378d815923d7716",
+    "content-hash": "30d4da72a6bd63d41f453ebd6f91488f",
     "packages": [
         {
-            "name": "phpixie/database",
-            "version": "3.2.1",
+            "name": "phpixie/cli",
+            "version": "3.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/PHPixie/Database.git",
-                "reference": "4c154addbcc783cb04f4795e19828feb346c2daa"
+                "url": "https://github.com/PHPixie/CLI.git",
+                "reference": "c38a5877aaf29763b6624abb8c51af7a88501d73"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPixie/Database/zipball/4c154addbcc783cb04f4795e19828feb346c2daa",
-                "reference": "4c154addbcc783cb04f4795e19828feb346c2daa",
+                "url": "https://api.github.com/repos/PHPixie/CLI/zipball/c38a5877aaf29763b6624abb8c51af7a88501d73",
+                "reference": "c38a5877aaf29763b6624abb8c51af7a88501d73",
                 "shasum": ""
             },
             "require": {
@@ -50,28 +50,27 @@
                     "homepage": "http://dracony.org"
                 }
             ],
-            "description": "PHPixie Database library",
+            "description": "ORM library for PHPixie",
             "homepage": "http://phpixie.com",
             "keywords": [
-                "database",
-                "mysql",
-                "postgresql",
-                "sqlite"
+                "cli",
+                "command line",
+                "console"
             ],
-            "time": "2016-03-15 13:39:46"
+            "time": "2016-06-13 08:33:58"
         },
         {
             "name": "phpixie/slice",
-            "version": "3.2.1",
+            "version": "3.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPixie/Slice.git",
-                "reference": "970d2f19958e8199905d93735c6d945451e5d3d1"
+                "reference": "4435da2e2f877b899380c64c86e1bd55795c615c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPixie/Slice/zipball/970d2f19958e8199905d93735c6d945451e5d3d1",
-                "reference": "970d2f19958e8199905d93735c6d945451e5d3d1",
+                "url": "https://api.github.com/repos/PHPixie/Slice/zipball/4435da2e2f877b899380c64c86e1bd55795c615c",
+                "reference": "4435da2e2f877b899380c64c86e1bd55795c615c",
                 "shasum": ""
             },
             "require-dev": {
@@ -107,7 +106,7 @@
                 "data",
                 "parameters"
             ],
-            "time": "2016-05-18 08:19:03"
+            "time": "2016-06-12 08:07:30"
         }
     ],
     "packages-dev": [
