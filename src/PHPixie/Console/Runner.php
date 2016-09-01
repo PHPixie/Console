@@ -1,22 +1,23 @@
 <?php
 
-namespace PHPixie\Command;
+namespace PHPixie\Console;
 
 class Runner
 {
-    protected $cliContextContainer;
+    protected $builder;
     
-    public function __construct($cliContextContainer)
+    public function __construct($builder)
     {
-        $this->$cliContextContainer = $cliContextContainer;
+        $this->builder = $builder;
     }
     
     public function runFromContext()
     {
-        $cliContext = $this->cliContextContainer->cliContext();
+        $cliContext = $this->builder->cli()->context();
         $arguments = $cliContext->arguments();
         
-        $commandName = 'help';
+        $commandName = $this->builder->registry()->defaultName();
+        
         if(!empty($arguments)) {
             $commandName = array_shift($arguments);
         }
@@ -26,17 +27,19 @@ class Runner
     
     public function runCommand($commandName, $arguments, $options, $rethrowException = true)
     {
-        $cliContext = $this->cliContextContainer->cliContext();
+        $cliContext = $this->builder->cli()->context();
         
         try{
-            $command = $this->registry->command($name);
+            $command = $this->builder->registry()->get($commandName);
             
-            $optionData = $this->getOptions($config->options(), $options);
-            $argumentData = $this->getArguments($config->arguments(), $arguments);
+            $config = $command->config();
             
-            $message = $command->run($cliContext, $argumentData, $optionData);
+            $optionData = $this->getOptions($config->getOptions(), $options);
+            $argumentData = $this->getArguments($config->getArguments(), $arguments);
+            
+            $message = $command->run($argumentData, $optionData);
             if($message !== null) {
-                $cliContext->outputStream()->writeln($message);
+                $cliContext->outputStream()->writeLine($message);
             }
         } catch(\Exception $e) {
             $cliContext->setExitCode(1);
@@ -47,14 +50,14 @@ class Runner
                     throw $e;
                 }
                 
-                $errorStream->writeln($this->formatter()->exception($e));
+                $errorStream->writeLine($this->builder->formatter()->exception($e));
                 return;
             }
             
-            $errorStream->writeln($this->formatter()->error($e->getError()));
+            $errorStream->writeLine($this->builder->formatter()->error($e->getError()));
             
             if($e instanceof InvalidInputException) {
-                $errorStream->writeln($command->usage());
+                $errorStream->writeLine($command->usage());
             }
         }
     }
@@ -75,15 +78,15 @@ class Runner
         
         $extraKeys = array_diff($keys, $names);
         if(!empty($extraKeys)) {
-            throw new InvalidInputException("Invalid option(s): ".implode(', ', $extraKeys)));
+            throw new InvalidInputException("Invalid option(s): ".implode(', ', $extraKeys));
         }
 
         $missingKeys = array_intersect($required, $keys);
         if(!empty($missingKeys)) {
-            throw new InvalidInputException("Missing required option(s): ".implode(', ', $missingKeys)));
+            throw new InvalidInputException("Missing required option(s): ".implode(', ', $missingKeys));
         }
         
-        return $this->builder->arraySlice($optionsData);
+        return $this->builder->arraySlice($optionData);
     }
     
     protected function getArguments($arguments, $argumentData)
@@ -91,8 +94,10 @@ class Runner
         $map = array();
         
         $mappedAll = false;
+        
+        $i = 0;
         foreach($arguments as $key => $argument) {
-            if(!array_key_exists($key, $rawArguments)) {
+            if(!array_key_exists($i, $argumentData)) {
                 if($argument->isRequired()) {
                     throw new InvalidInputException("Missing argument: {$argument->name()}");
                 }
@@ -101,16 +106,17 @@ class Runner
             }
             
             if($argument->isArray()) {
-                $map[$argument->name()] = array_slice($argumentData, $key);
+                $map[$argument->name()] = array_slice($argumentData, $i);
                 $mappedAll = true;
                 break;
             }
             
-            $map[$argument->name()] = $argumentData[$key];
+            $map[$argument->name()] = $argumentData[$i];
+            $i++;
         }
         
-        if(!$mappedAll && count($arguments) > count($argumentData)) {
-            throw new InvalidInputException("Too many arguments supplied");
+        if(!$mappedAll && count($argumentData) > count($arguments)) {
+            throw new Exception\InvalidInputException("Too many arguments supplied");
         }
         
         return $this->builder->arraySlice($map);

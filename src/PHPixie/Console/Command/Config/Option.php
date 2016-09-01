@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPixie\Command\Parameter;
+namespace PHPixie\Console\Command\Config;
 
 class Option
 {

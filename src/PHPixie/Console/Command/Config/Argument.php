@@ -1,23 +1,32 @@
 <?php
 
-namespace PHPixie\Command\Parameter;
+namespace PHPixie\Console\Command\Config;
 
 class Argument
 {
     protected $name;
+    protected $description;
     protected $isRequired;
     protected $isArray;
 
-    public function __construct($name, $isRequired, $isArray)
+    public function __construct($name)
     {
         $this->name = $name;
-        $this->isRequired = $isRequired;
-        $this->isArray = $isArray;
     }
 
     public function name()
     {
         return $this->name;
+    }
+    
+    public function description($description)
+    {
+        $this->description = $description;
+    }
+    
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     public function isRequired()

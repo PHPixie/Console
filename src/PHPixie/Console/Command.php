@@ -1,18 +1,10 @@
 <?php
 
-namespace PHPixie\Command\Commands;
+namespace PHPixie\Console;
 
-use \PHPixie\Console\Exception\InvalidInputException;
-
-class Command
+interface Command
 {
-    protected $config;
-    
-    public function __construct($config)
-    {
-        $config->assertValid();
-        $this->config = $config;
-    }
-    
-    abstract public function run($context, $optionData, $argumentData);
+    public function run($optionData, $argumentData);
+    public function config();
+    public function name();
 }

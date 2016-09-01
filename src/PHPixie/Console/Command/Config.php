@@ -6,31 +6,32 @@ class Config
 {
     protected $builder;
     protected $prefix;
+    protected $options = array();
+    protected $arguments = array();
+    protected $help;
     
-    public function __construct($builder, $prefix)
+    public function __construct($builder, $name)
     {
         $this->builder = $builder;
-        $this->prefix  = $prefix;
-    }
-    
-    public function name($name)
-    {
-        $this->name = $this->prefix.$name;
+        $this->name  = $name;
     }
     
     public function description($description)
     {
         $this->description = $description;
+        return $this;
     }
     
     public function usage($usage)
     {
         $this->usage = $usage;
+        return $this;
     }
     
     public function help($help)
     {
         $this->help = $help;
+        return $this;
     }
     
     public function option($name)
@@ -39,7 +40,7 @@ class Config
             throw new Exception("Option $name is already defined");
         }
         
-        $option = $this->builder->option($name);
+        $option = $this->buildOption($name);
         $this->options[$name] = $option;
         return $option;
     }
@@ -50,7 +51,7 @@ class Config
             throw new Exception("Argument $name is already defined");
         }
         
-        $argument = $this->builder->argument($name);
+        $argument = $this->buildArgument($name);
         $this->arguments[$name] = $argument;
         return $argument;
     }
@@ -78,27 +79,19 @@ class Config
     public function getUsage()
     {
         if($this->usage !== null) {
-            $this->usage = $this->builder->formatter()->usage(
-                $this->name,
-                $this->options,
-                $this->arguments
-            );
+            $this->usage = $this->builder->formatter()->usage($this);
         }
         
         return $this->usage;
     }
     
-    public function geHelp()
+    public function getHelp()
     {
         if($this->help !== null) {
-            $this->help = $this->builder->formatter()->fullUsage(
-                $this->name,
-                $this->options,
-                $this->arguments
-            );
+            return $this->help;
         }
         
-        return $this->help;
+        return $this->builder->formatter()->fullUsage($this);
     }
     
     public function assertValid()
@@ -129,5 +122,20 @@ class Config
                 $arrayArgument = $name;
             }
         }
+    }
+    
+    public function cliContext()
+    {
+        return $this->builder->cli()->context();
+    }
+    
+    protected function buildOption($name)
+    {
+        return new Config\Option($name);
+    }
+    
+    protected function buildArgument($name)
+    {
+        return new Config\Argument($name);
     }
 }
