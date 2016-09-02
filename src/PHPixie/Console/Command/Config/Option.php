@@ -44,15 +44,18 @@ class Option
     public function required()
     {
         $this->isRequired = true;
+        return $this;
     }
     
     public function flag()
     {
         $this->isFlag = true;
+        return $this;
     }
     
     public function description($description)
     {
         $this->description = $description;
+        return $this;
     }
 }

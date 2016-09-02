@@ -19,11 +19,6 @@ class Argument
         return $this->name;
     }
     
-    public function description($description)
-    {
-        $this->description = $description;
-    }
-    
     public function getDescription()
     {
         return $this->description;
@@ -37,5 +32,23 @@ class Argument
     public function isArray()
     {
         return $this->isArray;
+    }
+    
+    public function description($description)
+    {
+        $this->description = $description;
+        return $this;
+    }
+    
+    public function required()
+    {
+        $this->isRequired = true;
+        return $this;
+    }
+    
+    public function arrayOf()
+    {
+        $this->isArray = true;
+        return $this;
     }
 }

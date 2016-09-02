@@ -2,6 +2,8 @@
 
 namespace PHPixie\Console;
 
+use PHPixie\Console\Exception\InvalidInputException;
+
 class Runner
 {
     protected $builder;
@@ -22,7 +24,7 @@ class Runner
             $commandName = array_shift($arguments);
         }
         
-        $this->runCommand($commandName, $arguments, $cliContext->options(), false);
+        $this->runCommand($commandName, $arguments, $cliContext->options(), true);
     }
     
     public function runCommand($commandName, $arguments, $options, $rethrowException = true)
@@ -66,7 +68,7 @@ class Runner
     {
         $names = array();
         $required = array();
-
+        
         foreach ($options as $option) {
             $names[] = $option->name();
             if($option->isRequired()) {

@@ -113,6 +113,6 @@ class Formatter
     
     public function error($error)
     {
-        return $error;
+        return '[ERROR]: '.$error;
     }
 }
