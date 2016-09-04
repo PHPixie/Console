@@ -3,6 +3,7 @@
 namespace PHPixie\Console;
 
 use PHPixie\Console\Exception\InvalidInputException;
+use PHPixie\Console\Exception\CommandException;
 
 class Runner
 {
