@@ -18,6 +18,7 @@ modifications to the project, by updating some files from the new project skelet
 3. Add `"phpixie/framework-bundle": "~3.0"` to `composer.json`
 
 Optionally also copy the Console factory and the example Greet Command:
+
 4. https://github.com/PHPixie/Project/blob/master/bundles/app/src/Project/App/Console.php
 5. https://github.com/PHPixie/Project/blob/master/bundles/app/src/Project/App/Console/Greet.php
 6. Register the Console class in your Builder, like here: https://github.com/PHPixie/Project/blob/master/bundles/app/src/Project/App/Builder.php
