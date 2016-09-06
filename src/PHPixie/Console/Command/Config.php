@@ -118,7 +118,7 @@ class Config
                 $lastOptional = $name;
             }
             
-            if($argument->isRequired()) {
+            if($argument->isArray()) {
                 $arrayArgument = $name;
             }
         }
