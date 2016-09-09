@@ -38,6 +38,7 @@ Available commands:
 
 app:greet                     Greet the user
 framework:installWebAssets    Symlink or copy bundle web files to the projects web folder
+framework:generateBundle      Generate a new bundle
 help                          Print command list and usage
 ```
 
@@ -54,12 +55,14 @@ copy    Whether to copy web directories instead of symlinking them
 
 ## Default commands
 
-So far the only command that comes with the PHPixie project is `framework:installWebAssets`. The purpose of it is creating
-symlinks from bundle directories to the /web/bundles folder, e.g. /web/bundles/app -> /bundles/app/web. The idea behind it
-is that we can have bundles that are installable and updatable via composer that provide their own web assets.
+**framework:installWebAssets**
+Its purpose is creating symlinks from bundle directories to the /web/bundles folder, e.g. /web/bundles/app ->
+/bundles/app/web. The idea behind it is that we can have bundles that are installable and updatable via composer 
+that provide their own web assets. The `--copy` flag will copy the directories instead of symlinking them.
+This is usefull if you want to deploy the files to some CDN network afterwards.
 
-The `--copy` flag will copy the directories instead of symlinking them. This is usefull if you want to deploy the files to
-some CDN network afterwards.
+**framework:generateBundle**
+This command generates and registers a new bundle within your project.
 
 ## Adding your own commands
 
@@ -111,7 +114,8 @@ arguments of our command. The `user`, `skip-missing` and `f` are options. Note t
 they are specified matters, but for the options it does not, also short one letter options can be referenced with a single
 `-` instead of two.
 
-Let's look at defining the options:
+Let's look at defining options:
+
 ```php
 $config->option('user')
 
@@ -137,6 +141,7 @@ $config->option('f')
 
 When defining arguments you have to keep in mind that they should be defined in the same order in which they should be
 specified. In out case this means we have to define a `database` argument before the `tables` one:
+
 ```php
 $config->argument('database')
     ->required()
@@ -152,6 +157,7 @@ $config->argument('tables')
 ```
 
 If we were to run the `help` command now, we would see the following:
+
 ```
 ./console help app:sqldump
 
