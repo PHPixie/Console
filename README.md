@@ -43,6 +43,7 @@ help                          Print command list and usage
 ```
 
 You can get extended information about a command by using the `help` command:
+
 ```
 ./console help framework:installWebAssets
 
