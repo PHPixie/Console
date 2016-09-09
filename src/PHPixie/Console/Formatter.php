@@ -100,9 +100,8 @@ class Formatter
     {
         $len = 0;
         foreach($items as $item) {
-            $len = max(0, strlen($item->name()));
+            $len = max($len, strlen($item->name()));
         }
-        
         return $len+4;
     }
     
