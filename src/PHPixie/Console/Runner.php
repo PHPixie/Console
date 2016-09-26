@@ -60,7 +60,7 @@ class Runner
             $errorStream->writeLine($this->builder->formatter()->error($e->getMessage()));
             
             if($e instanceof InvalidInputException) {
-                $errorStream->writeLine($command->usage());
+                $errorStream->writeLine($config->usage());
             }
         }
     }
