@@ -19,6 +19,9 @@ class Registry
     public function get($name)
     {
         if(!isset($this->commands[$name])) {
+            if(!in_array($name, $this->commandNames())) {
+                throw new \PHPixie\Console\Exception\CommandException("Command '$name' does not exist");
+            }
             $this->commands[$name] = $this->buildCommand($name);
         }
         

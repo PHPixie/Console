@@ -6,6 +6,9 @@ class Config
 {
     protected $builder;
     protected $prefix;
+    protected $name;
+    protected $description;
+    protected $usage;
     protected $options = array();
     protected $arguments = array();
     protected $help;
