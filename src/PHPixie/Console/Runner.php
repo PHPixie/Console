@@ -44,24 +44,31 @@ class Runner
             if($message !== null) {
                 $cliContext->outputStream()->writeLine($message);
             }
+        } catch(\Throwable $e) {
+            $this->handleException($config, $cliContext, $rethrowException, $e);
         } catch(\Exception $e) {
-            $cliContext->setExitCode(1);
-            $errorStream = $cliContext->errorStream();
-            
-            if(!($e instanceof CommandException)) {
-                if($rethrowException) {
-                    throw $e;
-                }
-                
-                $errorStream->writeLine($this->builder->formatter()->exception($e));
-                return;
+            $this->handleException($config, $cliContext, $rethrowException, $e);
+        }
+    }
+    
+    protected function handleException($config, $cliContext, $rethrowException, $e)
+    {
+        $cliContext->setExitCode(1);
+        $errorStream = $cliContext->errorStream();
+
+        if(!($e instanceof CommandException)) {
+            if($rethrowException) {
+                throw $e;
             }
-            
-            $errorStream->writeLine($this->builder->formatter()->error($e->getMessage()));
-            
-            if($e instanceof InvalidInputException) {
-                $errorStream->writeLine($config->getUsage());
-            }
+
+            $errorStream->writeLine($this->builder->formatter()->exception($e));
+            return;
+        }
+
+        $errorStream->writeLine($this->builder->formatter()->error($e->getMessage()));
+
+        if($e instanceof InvalidInputException) {
+            $errorStream->writeLine($config->getUsage());
         }
     }
     
