@@ -4,6 +4,10 @@ namespace PHPixie\Console\Command;
 
 class Config
 {
+    /**
+     *
+     * @var \PHPixie\Console\Builder 
+     */
     protected $builder;
     protected $prefix;
     protected $name;
@@ -13,6 +17,11 @@ class Config
     protected $arguments = array();
     protected $help;
     
+    /**
+     * 
+     * @param \PHPixie\Console\Builder $builder
+     * @param string $name
+     */
     public function __construct($builder, $name)
     {
         $this->builder = $builder;
@@ -37,6 +46,12 @@ class Config
         return $this;
     }
     
+    /**
+     * 
+     * @param string $name
+     * @return Config\Option
+     * @throws Exception
+     */
     public function option($name)
     {
         if(isset($this->options[$name])) {
@@ -48,6 +63,12 @@ class Config
         return $option;
     }
     
+    /**
+     * 
+     * @param type $name
+     * @return Config\Argument
+     * @throws Exception
+     */
     public function argument($name)
     {
         if(isset($this->arguments[$name])) {
@@ -127,16 +148,30 @@ class Config
         }
     }
     
+    /**
+     * 
+     * @return \PHPixie\CLI\Context\SAPI
+     */
     public function cliContext()
     {
         return $this->builder->cli()->context();
     }
     
+    /**
+     * 
+     * @param string $name
+     * @return \PHPixie\Console\Command\Config\Option
+     */
     protected function buildOption($name)
     {
         return new Config\Option($name);
     }
     
+    /**
+     * 
+     * @param string $name
+     * @return \PHPixie\Console\Command\Config\Argument
+     */
     protected function buildArgument($name)
     {
         return new Config\Argument($name);

@@ -4,14 +4,33 @@ namespace PHPixie\Console;
 
 class Builder
 {
+    /**
+     *
+     * @var \PHPixie\Slice
+     */
     protected $slice;
+    
+    /**
+     *
+     * @var \PHPixie\CLI 
+     */
     protected $cli;
     
     protected $registry;
     protected $formatter;
+    /**
+     *
+     * @var \PHPixie\Console\Registry\Provider
+     */
     protected $provider;
     protected $runner;
 
+    /**
+     * 
+     * @param \PHPixie\Slice $slice
+     * @param \PHPixie\CLI $cli
+     * @param \PHPixie\Console\Registry\Provider $provider
+     */
     public function __construct($slice, $cli, $provider)
     {
         $this->slice = $slice;

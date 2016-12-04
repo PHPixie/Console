@@ -4,14 +4,26 @@ namespace PHPixie\Console\Command;
 
 abstract class Implementation implements \PHPixie\Console\Command
 {
+    /**
+     *
+     * @var \PHPixie\Console\Command\Config 
+     */
     protected $config;
     
+    /**
+     * 
+     * @param \PHPixie\Console\Command\Config $config
+     */
     public function __construct($config)
     {
         $config->assertValid();
         $this->config = $config;
     }
     
+    /**
+     * 
+     * @return \PHPixie\Console\Command\Config
+     */
     public function config()
     {
         return $this->config;
