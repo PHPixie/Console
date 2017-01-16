@@ -44,7 +44,7 @@ abstract class Implementation implements \PHPixie\Console\Command
         $this->cliContext()->outputStream()->write($string);
     }
     
-    protected function writeLine($string)
+    protected function writeLine($string = '')
     {
         $this->cliContext()->outputStream()->writeLine($string);
     }

@@ -31,12 +31,10 @@ class Runner
     public function runCommand($commandName, $arguments, $options, $rethrowException = true)
     {
         $cliContext = $this->builder->cli()->context();
-        
+        $command = $this->builder->registry()->get($commandName);
+        $config = $command->config();
+
         try{
-            $command = $this->builder->registry()->get($commandName);
-            
-            $config = $command->config();
-            
             $optionData = $this->getOptions($config->getOptions(), $options);
             $argumentData = $this->getArguments($config->getArguments(), $arguments);
             
